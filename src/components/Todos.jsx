@@ -2,7 +2,7 @@ import React from "react";
 import Todo from "./Todo";
 
 const Todos = ({ todos, deleteTodo, markAsDone }) => {
-const Todos = ({ todos, deleteTodo, markAsDone, showOnlyActive })} => {
+const Todos = ({ todos, deleteTodo, markAsDone, showOnlyActive }) => {
 
   const filteredTodos = showOnlyActive ? todos.filter(todo =>  !todo.done) : todos
   return (

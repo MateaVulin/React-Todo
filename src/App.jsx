@@ -1,36 +1,57 @@
 import { useState } from "react";
-import Todos from "./components/Todos";
-import AddTodo from "./components/AddTodos";
-import View from "./components/View";
 import "./App.css";
-import { useState } from "react";
-
+import Todos from "./components/Todos";
+import View from "./components/View";
+import AddTodo from "./components/AddTodo";
 function App() {
-  const [todos, setTodo] = useState([]);
+  const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState(null);
-  const newTodoHandler = (event) => {
-    setNewTodo({ id: Date.now(), name: event.target.value, done: false });
-  };
-
+  const [showOnlyActive, setShowOnlyActive] = useState(false);
 
   const addTodo = () => {
-    if(!newTodo) return
-    setTodos([...todos, newTodo])
-    setNewTodo(null)
+    if (!newTodo) return;
+    setTodos([...todos, newTodo]);
+    setNewTodo(null);
+  };
+  const newTodoHandler = (e) => {
+    setNewTodo({ name: e.target.value, id: Date.now(), done: false });
+  };
+  const deleteTodo = (todoId) => {
+    setTodos(todos.filter(({ id }) => id !== todoId));
+  };
+  const markAsDone = (todoId) => {
+    setTodos(
+      todos.map((todo) => {
+        if (todo.id === todoId) {
+          todo.done = !todo.done;
+        }
+        return todo;
+      })
+    );
   };
 
-  const deleteTodos =(todoId)=> {
-    setTodos(todos.filter(({id})) => id !== todoId)
-  }
+  const toggleView = () => {
+    setShowOnlyActive((prev) => !prev);
+  };
 
   return (
     <div className="App">
-      <AddTodo newTodoHandler={newTodoHandler} addTodo={addTodo} todos={todos} />
-      <Todos todos={todos}  deleteTodos={deleteTodos}/>
+      <AddTodo
+        addTodo={addTodo}
+        setNewTodo={setNewTodo}
+        newTodoHandler={newTodoHandler}
+        newTodo={newTodo}
+      />
+      <Todos todos={todos} deleteTodo={deleteTodo} markAsDone={markAsDone} />
       <View />
+      <Todos
+        todos={todos}
+        deleteTodo={deleteTodo}
+        markAsDone={markAsDone}
+        showOnlyActive={showOnlyActive}
+      />
+      <View showOnlyActive={showOnlyActive} toggleView={toggleView} />
     </div>
   );
 }
-
 export default App;
-
